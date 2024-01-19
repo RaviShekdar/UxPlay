@@ -1,24 +1,3 @@
-/**
- * RPiPlay - An open-source AirPlay mirroring server for Raspberry Pi
- * Copyright (C) 2019 Florian Draschbacher
- * Modified extensively to become 
- * UxPlay - An open-souce AirPlay mirroring server.
- * Modifications Copyright (C) 2021-23 F. Duncanh
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
- */
 
 #include <stddef.h>
 #include <cstring>
@@ -64,7 +43,7 @@
 
 #define SECOND_IN_USECS 1000000
 #define SECOND_IN_NSECS 1000000000UL
-#define DEFAULT_NAME "UxPlay"
+#define DEFAULT_NAME "CarPlay"
 #define DEFAULT_DEBUG_LOG false
 #define LOWEST_ALLOWED_PORT 1024
 #define HIGHEST_PORT 65535
@@ -420,24 +399,24 @@ static const char *get_homedir() {
     return homedir;
 }
 
-static std::string find_uxplay_config_file() {
+static std::string find_carplay_config_file() {
     std::string no_config_file = "";
     const char *homedir = NULL;
-    const char *uxplayrc = NULL;
+    const char *carplayrc = NULL;
     std::string config0, config1, config2;
     struct stat sb;
-    uxplayrc = getenv("UXPLAYRC");   /* first look for $UXPLAYRC */
-    if (uxplayrc) {
-        config0 = uxplayrc;
+    carplayrc = getenv("CARPLAYRC");   /* first look for $CARPLAYRC */
+    if (carplayrc) {
+        config0 = carplayrc;
         if (stat(config0.c_str(), &sb) == 0) return config0;
     }
     homedir = get_homedir();
     if (homedir) {
       config1 = homedir;
-      config1.append("/.uxplayrc");
-      if (stat(config1.c_str(), &sb) == 0) return config1;  /* look for ~/.uxplayrc */
+      config1.append("/.carplayrc");
+      if (stat(config1.c_str(), &sb) == 0) return config1;  /* look for ~/.carplayrc */
       config2 = homedir;
-      config2.append("/.config/uxplayrc"); /* look for ~/.config/uxplayrc */
+      config2.append("/.config/carplayrc"); /* look for ~/.config/carplayrc */
       if (stat(config2.c_str(), &sb) == 0) return config2;
     }
     return no_config_file;
@@ -554,8 +533,7 @@ static std::string random_mac () {
 }
 
 static void print_info (char *name) {
-    printf("UxPlay %s: An open-source AirPlay mirroring server.\n", VERSION);
-    printf("=========== Website: https://github.com/FDH2/UxPlay ==========\n");
+    printf("CarPlay %s: An open-source AirPlay mirroring server.\n", VERSION);
     printf("Usage: %s [-n name] [-s wxh] [-p [n]] [(other options)]\n", name);
     printf("Options:\n");
     printf("-n name   Specify the network name of the AirPlay server\n");
@@ -598,7 +576,7 @@ static void print_info (char *name) {
     printf("-nc       do Not Close video window when client stops mirroring\n");
     printf("-nohold   Drop current connection when new client connects.\n");
     printf("-restrict Restrict clients to those specified by \"-allow <deviceID>\"\n");
-    printf("          UxPlay displays deviceID when a client attempts to connect\n");
+    printf("          CarPlay displays deviceID when a client attempts to connect\n");
     printf("          Use \"-restrict no\" for no client restrictions (default)\n");
     printf("-allow <i>Permit deviceID = <i> to connect if restrictions are imposed\n");
     printf("-block <i>Always block connections from deviceID = <i>\n");
@@ -606,10 +584,10 @@ static void print_info (char *name) {
     printf("-fps n    Set maximum allowed streaming framerate, default 30\n");
     printf("-f {H|V|I}Horizontal|Vertical flip, or both=Inversion=rotate 180 deg\n");
     printf("-r {R|L}  Rotate 90 degrees Right (cw) or Left (ccw)\n");
-    printf("-m [mac]  Set MAC address (also Device ID);use for concurrent UxPlays\n");
+    printf("-m [mac]  Set MAC address (also Device ID);use for concurrent CarPlays\n");
     printf("          if mac xx:xx:xx:xx:xx:xx is not given, a random mac is used\n");
-    printf("-key <fn> Store private key in file <fn> (default:$HOME/.uxplay.pem)\n");
-    printf("-dacp [fn]Export client DACP information to file $HOME/.uxplay.dacp\n");
+    printf("-key <fn> Store private key in file <fn> (default:$HOME/.carplay.pem)\n");
+    printf("-dacp [fn]Export client DACP information to file $HOME/.carplay.dacp\n");
     printf("          (option to use file \"fn\" instead); used for client remote\n");
     printf("-vdmp [n] Dump h264 video output to \"fn.h264\"; fn=\"videodump\",change\n");
     printf("          with \"-vdmp [n] filename\". If [n] is given, file fn.x.h264\n");
@@ -622,7 +600,7 @@ static void print_info (char *name) {
     printf("-d        Enable debug logging\n");
     printf("-v        Displays version information\n");
     printf("-h        Displays this help\n");
-    printf("Startup options in $UXPLAYRC, ~/.uxplayrc, or ~/.config/uxplayrc are\n");
+    printf("Startup options in $CARPLAYRC, ~/.carplayrc, or ~/.config/carplayrc are\n");
     printf("applied first (command-line options may modify them): format is one \n");
     printf("option per line, no initial \"-\"; lines starting with \"#\" are ignored.\n");
 }
@@ -896,7 +874,7 @@ static void parse_arguments (int argc, char *argv[]) {
             print_info(argv[0]);
             exit(0);
         } else if (arg == "-v") {
-            printf("UxPlay version %s; for help, use option \"-h\"\n", VERSION);
+            printf("CarPlay version %s; for help, use option \"-h\"\n", VERSION);
             exit(0);
         } else if (arg == "-vp") {
             if (!option_has_value(i, argc, arg, argv[i+1])) exit(1);
@@ -919,7 +897,7 @@ static void parse_arguments (int argc, char *argv[]) {
             audiosink.erase();
             audiosink.append(argv[++i]);
         } else if (arg == "-t") {
-            fprintf(stderr,"The uxplay option \"-t\" has been removed: it was a workaround for an  Avahi issue.\n");
+            fprintf(stderr,"The carplay option \"-t\" has been removed: it was a workaround for an  Avahi issue.\n");
             fprintf(stderr,"The correct solution is to open network port UDP 5353 in the firewall for mDNS queries\n");
             exit(1);
         } else if (arg == "-nc") {
@@ -1068,7 +1046,7 @@ static void parse_arguments (int argc, char *argv[]) {
                 }   
 	    } else {
                 dacpfile.append(get_homedir());
-                dacpfile.append("/.uxplay.dacp");
+                dacpfile.append("/.carplay.dacp");
             }
         } else {
             fprintf(stderr, "unknown option %s, stopping (for help use option \"-h\")\n",argv[i]);
@@ -1655,14 +1633,14 @@ static void stop_raop_server () {
     return;
 }
 
-static void read_config_file(const char * filename, const char * uxplay_name) {
+static void read_config_file(const char * filename, const char * carplay_name) {
     std::string config_file = filename;
     std::string option_char = "-";
     std::vector<std::string> options;
-    options.push_back(uxplay_name);
+    options.push_back(carplay_name);
     std::ifstream file(config_file);
     if (file.is_open()) {
-        fprintf(stdout,"UxPlay: reading configuration from  %s\n", config_file.c_str());
+        fprintf(stdout,"CarPlay: reading configuration from  %s\n", config_file.c_str());
         std::string line;
         while (std::getline(file, line)) {
             if (line[0] == '#') continue;
@@ -1721,7 +1699,7 @@ static void read_config_file(const char * filename, const char * uxplay_name) {
 	}
         file.close();
     } else {
-        fprintf(stderr,"UxPlay: failed to open configuration file at %s\n", config_file.c_str());
+        fprintf(stderr,"CarPlay: failed to open configuration file at %s\n", config_file.c_str());
     }
     if (options.size() > 1) {
         int argc = options.size();
@@ -1758,7 +1736,7 @@ int main (int argc, char *argv[]) {
     if (!getenv("AVAHI_COMPAT_NOWARN")) putenv(avahi_compat_nowarn);
 #endif
 
-    config_file = find_uxplay_config_file();
+    config_file = find_carplay_config_file();
     if (config_file.length()) {
         read_config_file(config_file.c_str(), argv[0]);
     }
@@ -1773,7 +1751,7 @@ int main (int argc, char *argv[]) {
     }
 #endif
 
-    LOGI("UxPlay %s: An Open-Source AirPlay mirroring and audio-streaming server.", VERSION);
+    LOGI("CarPlay %s: An Open-Source AirPlay mirroring and audio-streaming server.", VERSION);
 
     if (audiosink == "0") {
         use_audio = false;
@@ -1830,7 +1808,7 @@ int main (int argc, char *argv[]) {
         if (homedir) {
             keyfile.erase();
             keyfile = homedir;
-            keyfile.append("/.uxplay.pem");
+            keyfile.append("/.carplay.pem");
         } else {
 	    LOGE("could not determine $HOME: public key wiil no be saved, and so will not be persistent");
         }

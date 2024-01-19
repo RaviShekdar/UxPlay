@@ -1,24 +1,3 @@
-/**
- * RPiPlay - An open-source AirPlay mirroring server for Raspberry Pi
- * Copyright (C) 2019 Florian Draschbacher
- * Modified for:
- * UxPlay - An open-source AirPlay mirroring server
- * Copyright (C) 2021-23 F. Duncanh
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
- */
 
 #include "video_renderer.h"
 #include <gst/gst.h>
@@ -138,7 +117,7 @@ void  video_renderer_init(logger_t *render_logger, const char *server_name, vide
     logger = render_logger;
 
     /* this call to g_set_application_name makes server_name appear in the  X11 display window title bar, */
-    /* (instead of the program name uxplay taken from (argv[0]). It is only set one time. */
+    /* (instead of the program name carplay taken from (argv[0]). It is only set one time. */
 
     const gchar *appname = g_get_application_name();
     if (!appname || strcmp(appname,server_name))  g_set_application_name(server_name);
@@ -286,7 +265,7 @@ void video_renderer_render_buffer(unsigned char* data, int *data_len, int *nal_c
 #ifdef X_DISPLAY_FIX
         if (renderer->gst_window && !(renderer->gst_window->window) && X11_search_attempts < MAX_X11_SEARCH_ATTEMPTS) {
             X11_search_attempts++;
-            logger_log(logger, LOGGER_DEBUG, "Looking for X11 UxPlay Window, attempt %d", (int) X11_search_attempts);
+            logger_log(logger, LOGGER_DEBUG, "Looking for X11 CarPlay Window, attempt %d", (int) X11_search_attempts);
             get_x_window(renderer->gst_window, renderer->server_name);
 	    if (renderer->gst_window->window) {
                 logger_log(logger, LOGGER_INFO, "\n*** X11 Windows: Use key F11 or (left Alt)+Enter to toggle full-screen mode\n");
@@ -294,7 +273,7 @@ void video_renderer_render_buffer(unsigned char* data, int *data_len, int *nal_c
                     set_fullscreen(renderer->gst_window, &fullscreen);
                 }
             } else if (X11_search_attempts == MAX_X11_SEARCH_ATTEMPTS) {
-	      logger_log(logger, LOGGER_DEBUG, "X11 UxPlay Window not found in %d search attempts", MAX_X11_SEARCH_ATTEMPTS);
+          logger_log(logger, LOGGER_DEBUG, "X11 CarPlay Window not found in %d search attempts", MAX_X11_SEARCH_ATTEMPTS);
             }
         }
 #endif
@@ -353,8 +332,8 @@ gboolean gstreamer_pipeline_bus_callback(GstBus *bus, GstMessage *message, gpoin
                      "*** If you are letting the default autovideosink select the videosink,\n"
                      "*** GStreamer may be trying to use non-functional hardware h264 video decoding.\n"
                      "*** Try using option -avdec to force software decoding or use -vs <videosink>\n"
-                     "*** to select a videosink of your choice (see \"man uxplay\").\n\n"
-                     "*** Raspberry Pi OS with (unpatched) GStreamer-1.18.4 needs \"-bt709\" uxplay option");
+                     "*** to select a videosink of your choice (see \"man carplay\").\n\n"
+                     "*** Raspberry Pi OS with (unpatched) GStreamer-1.18.4 needs \"-bt709\" carplay option");
         }
 	g_error_free (err);
         g_free (debug);

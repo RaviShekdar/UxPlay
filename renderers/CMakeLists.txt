@@ -47,7 +47,7 @@ if( GST_INCLUDE_DIRS MATCHES "/Library/FrameWorks/GStreamer.framework/include" )
 # fix to use -DGST_MACOS for "Official" GStreamer >= 1.22 packages
   pkg_check_modules ( GST122 gstreamer-1.0>=1.22 )
   if ( GST122_FOUND )
-    set( GST_MACOS "1" CACHE STRING "define GST_MACOS in uxplay.cpp" )
+    set( GST_MACOS "1" CACHE STRING "define GST_MACOS in carplay.cpp" )
   endif()
 endif()
 target_include_directories ( renderers PUBLIC ${GST_INCLUDE_DIRS} )

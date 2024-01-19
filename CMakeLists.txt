@@ -4,7 +4,7 @@ else ()
   cmake_minimum_required( VERSION 3.5 )
 endif ()
 
-project( uxplay )
+project( carplay )
 
 message( STATUS "Project name: " ${PROJECT_NAME} )
 
@@ -47,14 +47,14 @@ if  ( GST_MACOS )
      message ( STATUS "define GST_MACOS" )
 endif()
 
-add_executable( uxplay uxplay.cpp )
-target_link_libraries( uxplay
+add_executable( carplay carplay.cpp )
+target_link_libraries( carplay
                    renderers
                    airplay
 		   )
 
-install( TARGETS  uxplay RUNTIME DESTINATION bin )
-install( FILES uxplay.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1 )
+install( TARGETS  carplay RUNTIME DESTINATION bin )
+install( FILES carplay.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1 )
 install( FILES README.md README.txt README.html LICENSE DESTINATION ${CMAKE_INSTALL_DOCDIR} ) 
 install( FILES lib/llhttp/LICENSE-MIT DESTINATION ${CMAKE_INSTALL_DOCDIR}/llhttp ) 
 

@@ -7,7 +7,7 @@ message( STATUS "*** CFLAGS \"" ${CMAKE_C_FLAGS} "\" from build environment will
 if( NOT NO_MARCH_NATIVE AND CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)" )
   set( CMAKE_C_FLAGS "-Ofast -march=native ${CMAKE_C_FLAGS}" )
   message( STATUS "Using CFLAGS with  -march=native" )
-  message( STATUS "*** ONLY USE THIS WHEN COMPILING ON THE MACHINE THAT WILL RUN UXPLAY" )
+  message( STATUS "*** ONLY USE THIS WHEN COMPILING ON THE MACHINE THAT WILL RUN CARPLAY" )
   message( STATUS "  run \"cmake -DNO_MARCH_NATIVE=ON\" to switch off this compiler option" )
 else()
   message( STATUS "Not using -march=native" )
